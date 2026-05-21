@@ -123,61 +123,88 @@ def get_country_information(name):
     except requests.exceptions.RequestException as e:
         return f"API Request failed: {e}"
 
-# Creating the agent
+running = True
 
-# Create the agent using the OpenAI API
-graph = create_agent(
-    model="openai:gpt-4.1-mini",
-    tools=[check_weather,get_country_information],
-    system_prompt=(
-        "You are an AI weather and country information assistant. "
-        "When asked about a country, you MUST call BOTH the check_weather tool "
-        "AND the get_country_information tool, and include ALL results "
-        "(weather, capital, currency, and population) in your final answer."
-        "you MUST the TEXT OUTPUT OF THE todo String, retaining all the text but MAKING a COMPLETE SENTENCE"
+while running:
+
+    print("Welcome to the Weather and Country infor AI agent\n"
+          "My name is Agent BOB")
+
+    location = input("Enter your preferred location: \n")
+
+    inputs = {
+        "messages": [
+            {"role": "user",
+             "content": f"What is the weather in {location} and provide information about {location}? add information about Country like capital, currency and population."}
+        ]
+    }
+
+
+    # Creating the agent
+
+    # Create the agent using the OpenAI API
+    graph = create_agent(
+        model="openai:gpt-4.1-mini",
+        tools=[check_weather,get_country_information],
+        system_prompt=(
+            "You are an AI weather and country information assistant. "
+            "When asked about a country, you MUST call BOTH the check_weather tool "
+            "AND the get_country_information tool, and include ALL results "
+            "(weather, capital, currency, and population) in your final answer."
+            "you MUST use the TEXT OUTPUT OF THE todo String, retaining all the text but MAKING a COMPLETE SENTENCE"
+        )
     )
-)
 
-inputs = {
-    "messages": [
-        {"role": "user",
-         "content": "What is the weather in Tennessee, USA and provide information about USA? ALso, add information about Country like capital, currency and population."}
-    ]
-}
+    # inputs = {
+    #     "messages": [
+    #         {"role": "user",
+    #          "content": "What is the weather in Tennessee, USA and provide information about USA? ALso, add information about Country like capital, currency and population."}
+    #     ]
+    # }
 
-# Run the agent
-# chunk = graph.invoke(inputs)
-# print(result)
+    # Run the agent
+    # chunk = graph.invoke(inputs)
+    # print(result)
 
-# Streaming helps us get the output in real-time as it's generated
-for chunk in graph.stream(inputs, stream_mode="updates"):
-    # 1. Model output
-    if "model" in chunk:
-        messages = chunk["model"]["messages"]
+    # Streaming helps us get the output in real-time as it's generated
+    for chunk in graph.stream(inputs, stream_mode="updates"):
+        # 1. Model output
+        if "model" in chunk:
+            messages = chunk["model"]["messages"]
 
-        for msg in messages:
-            # Tool call request
-            if msg.tool_calls:
-                print("\n🤖 Agent wants to use a tool:")
-                for tool_call in msg.tool_calls:
-                    print(f"Tool: {tool_call['name']}")
-                    print(f"Arguments: {tool_call['args']}")
+            for msg in messages:
+                # Tool call request
+                if msg.tool_calls:
+                    print("\n🤖 Agent wants to use a tool:")
+                    for tool_call in msg.tool_calls:
+                        print(f"Tool: {tool_call['name']}")
+                        print(f"Arguments: {tool_call['args']}")
 
-            # Final AI response
-            if msg.content:
-                print("\n✅ Final Answer:")
-                print(msg.content)
+                # Final AI response
+                if msg.content:
+                    print("\n✅ Final Answer:")
+                    print(msg.content)
 
-            # Token usage
-            if hasattr(msg, "usage_metadata") and msg.usage_metadata:
-                print("\n📊 Token Usage:")
-                pprint(msg.usage_metadata)
+                # Token usage
+                if hasattr(msg, "usage_metadata") and msg.usage_metadata:
+                    print("\n📊 Token Usage:")
+                    pprint(msg.usage_metadata)
 
-    # 2. Tool output
-    if "tools" in chunk:
-        messages = chunk["tools"]["messages"]
+        # 2. Tool output
+        if "tools" in chunk:
+            messages = chunk["tools"]["messages"]
 
-        for msg in messages:
-            print("\n🛠️ Tool Result:")
-            print(f"Tool: {msg.name}")
-            print(f"Output: {msg.content}")
+            for msg in messages:
+                print("\n🛠️ Tool Result:")
+                print(f"Tool: {msg.name}")
+                print(f"Output: {msg.content}")
+
+
+    print("Do you want to provide another location?")
+    track = input("Enter yes or no: \n")
+    if track == "no":
+        running = False
+    else:
+        print("Understood. I have safely ended our session and closed the workspace. "
+        "Thank you for using asking Agent BOB. If you require further assistance in the future, "
+        "please don't hesitate to log back in. Goodbye")
