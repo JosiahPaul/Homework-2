@@ -45,33 +45,33 @@ def check_weather(location: str) -> str:
         description = data["weather"][0]["description"]
         humidity = data["main"]["humidity"]
 
-        temp = [0, 12, 27, 35]
+        #temp = [0, 12, 27, 35]
         todo = ""
-        for tem in temp:
-            if temperature < 0:
+        #for tem in temp:
+        if temperature < 0:
                 # label = "too cold"
                 # return label
-                todo = (f"freezing, risk of hypothermia and frostbite with prolonged exposure"
+            todo = (f"freezing, risk of hypothermia and frostbite with prolonged exposure"
                         f"wear a very thick clothing for the day")
-            elif temperature <= 12:
+        elif temperature <= 12:
                 # label = "cold"
                 # return label
-                todo = (f"chilly, requires a coat; uncomfortable for extended outdoor activity"
+            todo = (f"chilly, requires a coat; uncomfortable for extended outdoor activity"
                         f"wear a moderately thick clothing for the day")
-            elif temperature <= 27:
+        elif temperature <= 27:
                 # label = "warm"
                 # return label
-                todo = (f"the sweet spot for most people; pleasant for everyday activity."
+            todo = (f"the sweet spot for most people; pleasant for everyday activity."
                         f"wear a light clothing for the day")
-            elif temperature <= 35:
+        elif temperature <= 35:
                 # label = "hot"
                 # return label
-                todo = (f"sweaty and uncomfortable; stay hydrated."
+            todo = (f"sweaty and uncomfortable; stay hydrated."
                         f"wear a very light clothing for the day")
-            else:
+        else:
                 # label = "too hot"
                 # return label
-                todo = (f"dangerous, especially with high humidity; risk of heat exhaustion or heatstroke."
+            todo = (f"dangerous, especially with high humidity; risk of heat exhaustion or heatstroke."
                         f"stay in door and keep cooling system on.")
 
 
