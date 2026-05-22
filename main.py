@@ -19,6 +19,7 @@ def check_weather(location: str) -> str:
 
     # OpenWeatherMap APi endpoint
     url = "https://api.openweathermap.org/data/2.5/weather"
+
     try:
 
         # Query parameters
@@ -123,14 +124,14 @@ def get_country_information(name):
     except requests.exceptions.RequestException as e:
         return f"API Request failed: {e}"
 
+print("Welcome to the Weather and Country information AI agent\n"
+      "My name is Agent BOB")
+
 running = True
 
 while running:
 
-    print("Welcome to the Weather and Country infor AI agent\n"
-          "My name is Agent BOB")
-
-    location = input("Enter your preferred location: \n")
+    location = input("Enter your destination location: \n")
 
     inputs = {
         "messages": [
@@ -138,9 +139,6 @@ while running:
              "content": f"What is the weather in {location} and provide information about {location}? add information about Country like capital, currency and population."}
         ]
     }
-
-
-    # Creating the agent
 
     # Create the agent using the OpenAI API
     graph = create_agent(
@@ -203,8 +201,8 @@ while running:
     print("Do you want to provide another location?")
     track = input("Enter yes or no: \n")
     if track == "no":
-        running = False
-    else:
         print("Understood. I have safely ended our session and closed the workspace. "
         "Thank you for using asking Agent BOB. If you require further assistance in the future, "
         "please don't hesitate to log back in. Goodbye")
+        running = False
+
