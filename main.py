@@ -5,7 +5,7 @@ from pprint import pprint
 import requests
 from dotenv import load_dotenv
 from langchain.agents import create_agent
-from openai.types.graders import label_model_grader_param
+#from openai.types.graders import label_model_grader_param
 
 #load environment variables from the variable .env file
 # had to hardcode path of variable file as argument, bcos it was showing error
@@ -47,7 +47,7 @@ def check_weather(location: str) -> str:
 
         temp = [0, 12, 27, 35]
         todo = ""
-        for temp in temp:
+        for tem in temp:
             if temperature < 0:
                 # label = "too cold"
                 # return label
@@ -107,7 +107,7 @@ def get_country_information(name):
         if not isinstance(data, list) or len(data) == 0:
             return f"No data found for country {name}"
 
-        # trying to parse the structured JSOn response well
+        # trying to parse the structured JSON response well
         country = data[0]
         country_name = country.get('name', {}).get('common', 'N/A')
         capital = country.get('capital', ['N/A'])[0]
@@ -156,13 +156,13 @@ while running:
     # inputs = {
     #     "messages": [
     #         {"role": "user",
-    #          "content": "What is the weather in Tennessee, USA and provide information about USA? ALso, add information about Country like capital, currency and population."}
-    #     ]
+    #          "content": "What is the weather in Tennessee, USA and provide information on country? Also, add information about Country like capital, currency and population."}
+    #    ]
     # }
 
     # Run the agent
     # chunk = graph.invoke(inputs)
-    # print(result)
+
 
     # Streaming helps us get the output in real-time as it's generated
     for chunk in graph.stream(inputs, stream_mode="updates"):
